@@ -18,27 +18,33 @@ class PokemonPage extends React.Component {
   fetchPokemon = () => {
     fetch(url)
       .then(res => res.json())
-      .then(pokemon => this.setState({ pokemon: pokemon }))
-      .then(() => console.log(this.state));
+      .then(pokemon => this.setState({ pokemon: pokemon }));
   };
 
   addPokemon = pokemon => {
-    console.log(this.state);
-    console.log(pokemon);
-    // fetch(url, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json"
-    //   },
-    //   body: JSON.stringify(newPokemon)
-    // })
-    //   .then(res => res.json())
-    //   .then(createdTask => {
-    //     this.setState({
-    //       tasks: [...this.state.tasks, createdTask]
-    //     });
-    //   });
+    let newPokemon = {
+      name: pokemon.name,
+      sprites: {
+        back: pokemon.backUrl,
+        front: pokemon.frontUrl
+      },
+      stats: [
+        { value: "", name: "special-defense" },
+        { value: "", name: "special-attack" },
+        { value: "", name: "defense" },
+        { value: "", name: "attack" },
+        { value: "", name: "speed" },
+        { value: pokemon.hp, name: "hp" }
+      ]
+    };
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(newPokemon)
+    }).then(this.fetchPokemon);
   };
 
   componentDidMount = () => {
